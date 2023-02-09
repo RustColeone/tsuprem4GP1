@@ -1,0 +1,92 @@
+
+
+
+
+         **************************************************************
+         ***                     TSUPREM-4 (TM)                     ***
+         ***      Version G-2012.06-0, System K (AMD64: Linux)      ***
+         ***                Copyright (C) 1988-2011                 ***
+         ***                     Synopsys, Inc.                     ***
+         ***                                                        ***
+         ***  This software and the associated documentation are    ***
+         ***  confidential and proprietary to Synopsys, Inc.  Your  ***
+         ***  use or disclosure of this software is subject to the  ***
+         ***  terms and conditions of a written license agreement   ***
+         ***  between you, or your company, and Synopsys, Inc.      ***
+         ***                                                        ***
+         ***                Compiled: April 30, 2012                ***
+         ***       TSUPREM-4 is a trademark of Synopsys, Inc.       ***
+         **************************************************************
+
+                               9-Feb-2023 14:58:52
+
+
+
+ Entering source file main.inp.
+
+$ Include Mask
+MASK IN.FILE =mask.tl1 PRINT
+
+Comments from mask data file "mask.tl1":
+/ Mask definition file s4ex4m.tl1, for use with s4ex4[abc].
+(End of comments from mask data file)
+
+The following masks are currently defined (locations in microns):
+    Name:  Field        min X:    0.0000   max X:   24.0000
+        opaque between    0.0000  and   3.9000
+    Name:  Poly         min X:    0.0000   max X:   24.0000
+        opaque between    0.0000  and   1.0000
+        opaque between    3.0000  and   5.0000
+        opaque between    7.0000  and   9.0000
+        opaque between   11.0000  and  13.0000
+        opaque between   15.0000  and  17.0000
+        opaque between   19.0000  and  21.0000
+        opaque between   23.0000  and  24.0000
+    Name:  Contact      min X:    0.0000   max X:   24.0000
+        opaque between    0.0000  and   1.9500
+        opaque between    3.2500  and   5.0000
+    Name:  Metal        min X:    0.0000   max X:   24.0000
+        opaque between    1.3000  and   5.0000
+
+$ Background Doping
+INITIALIZE BORON=1E15
+** Automatic X grid generation:  lines based on mask edges.
+** Automatic Y grid generation.
+   78 lines in the x direction.
+   36 lines in the y direction.
+
+$ Grow buried layer masking oxide
+DIFFUSION TEMP=1200 TIME=120 STEAM
+
+$ Define polysilicon gate
+MATERIAL MAT=POLY ^POLYCRYS
+DEPOSIT POLYSILICON THICK=0.4 SPACES=2
+DEPOSIT PHOTORESIST THICK=1.0
+EXPOSE MASK=Poly
+DEVELOP
+ETCH POLYSILICON TRAP THICK=0.7 ANGLE=79
+ETCH PHOTORESIST ALL
+
+$ Oxidize the polysilicon gate
+DIFFUSION TIME=30 TEMP=1000 DRYO2 
+
+$ Plot structure
+SELECT Z=LOG10(BORON) TITLE="Etching"
+PLOT.2D SCALE Y.MAX=3
+
+   Top of the device is at y=-1.14 microns.
+   Top axis is at y=-1.56 microns.
+
+** Plotting to device: "x" (specified by DEFPDEV environment variable)
+
+$ Color fill the regions
+COLOR SILICON COLOR=7
+COLOR POLY COLOR=6
+COLOR OXIDE COLOR=5
+
+ Exiting source file main.inp.
+
+
+
+ *** END TSUPREM-4 ***
+
