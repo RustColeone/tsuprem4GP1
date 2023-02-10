@@ -18,7 +18,7 @@
          ***       TSUPREM-4 is a trademark of Synopsys, Inc.       ***
          **************************************************************
 
-                               9-Feb-2023 15:46:15
+                               9-Feb-2023 17:00:51
 
 
 
@@ -45,14 +45,29 @@ The following masks are currently defined (locations in microns):
     Name:  Poly         min X:    0.0000   max X:   24.0000
         opaque between    1.5000  and   2.5000
         opaque between    5.5000  and   6.5000
+        opaque between    9.0000  and  11.0000
+    Name:  Contact      min X:    0.0000   max X:   24.0000
+        opaque between    0.0000  and   1.2500
+        opaque between    1.5000  and   1.7500
+        opaque between    2.2500  and   2.5000
+        opaque between    2.7500  and   5.2500
+        opaque between    5.5000  and   5.7500
+        opaque between    6.2500  and   6.5000
+        opaque between    6.7500  and   9.7500
+        opaque between   10.2500  and  13.7500
+        opaque between   14.2500  and  24.0000
     Name:  Metal        min X:    0.0000   max X:   24.0000
-        opaque between    1.3000  and   5.0000
+        opaque between    0.0000  and   1.5000
+        opaque between    1.7500  and   2.2500
+        opaque between    2.5000  and   5.5000
+        opaque between    5.7500  and   6.2500
+        opaque between    6.5000  and  24.0000
 
 $ Background Doping
 INITIALIZE BORON=1E15
 ** Automatic X grid generation:  lines based on mask edges.
 ** Automatic Y grid generation.
-   83 lines in the x direction.
+   92 lines in the x direction.
    36 lines in the y direction.
 
 $ Grow buried layer masking oxide
@@ -80,12 +95,29 @@ ETCH PHOTORESIST ALL
 $ Oxidize the polysilicon gate
 DIFFUSION TIME=30 TEMP=1000 DRYO2 
 
+DEPOSIT OXIDE THICKNES=0.50
+
+DEPOSIT PHOTORESIST THICK=1.0
+EXPOSE MASK=Contact
+DEVELOP
+ETCH OXIDE THICK=1.5
+ETCH PHOTORESIST ALL
+
+DEPOSIT ALUMINUM THICK=1
+ETCH ALUMINUM THICK=1
+
+DEPOSIT PHOTORESIST THICK=1.0
+EXPOSE MASK=Metal
+DEVELOP
+ETCH ALUMINUM THICK=1
+ETCH PHOTORESIST ALL
+
 $ Plot structure
 SELECT Z=LOG10(BORON) TITLE="Etching"
 PLOT.2D SCALE Y.MAX=3
 
-   Top of the device is at y=-0.379 microns.
-   Top axis is at y=-0.716 microns.
+   Top of the device is at y=-0.891 microns.
+   Top axis is at y=-1.28 microns.
 
 ** Plotting to device: "x" (specified by DEFPDEV environment variable)
 
@@ -93,6 +125,7 @@ $ Color fill the regions
 COLOR SILICON COLOR=7
 COLOR POLY COLOR=6
 COLOR OXIDE COLOR=5
+COLOR ALUM COLOR=2
 
  Exiting source file main.inp.
 
