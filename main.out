@@ -18,7 +18,7 @@
          ***       TSUPREM-4 is a trademark of Synopsys, Inc.       ***
          **************************************************************
 
-                               9-Feb-2023 17:14:52
+                              14-Feb-2023 17:24:24
 
 
 
@@ -58,7 +58,10 @@ The following masks are currently defined (locations in microns):
         opaque between   13.7500  and  14.2500
         opaque between   14.7500  and  17.2500
         opaque between   17.7500  and  18.2500
-        opaque between   18.7500  and  24.0000
+        opaque between   18.7500  and  21.2500
+        opaque between   21.5000  and  21.7500
+        opaque between   22.2500  and  22.5000
+        opaque between   22.7500  and  24.0000
     Name:  Metal        min X:    0.0000   max X:   24.0000
         opaque between    0.0000  and   1.5000
         opaque between    1.7500  and   2.2500
@@ -66,13 +69,15 @@ The following masks are currently defined (locations in microns):
         opaque between    5.7500  and   6.2500
         opaque between    6.5000  and  13.7500
         opaque between   14.2500  and  17.7500
-        opaque between   18.2500  and  24.0000
+        opaque between   18.2500  and  21.5000
+        opaque between   21.7500  and  22.2500
+        opaque between   22.5000  and  24.0000
 
 $ Background Doping
 INITIALIZE BORON=1E15
 ** Automatic X grid generation:  lines based on mask edges.
 ** Automatic Y grid generation.
-   97 lines in the x direction.
+   100 lines in the x direction.
    36 lines in the y direction.
 
 $ Grow buried layer masking oxide
@@ -127,6 +132,29 @@ COLOR SILICON COLOR=7
 COLOR POLY COLOR=6
 COLOR OXIDE COLOR=5
 COLOR ALUM COLOR=2
+
+ELECTRICAL
+
+
+************************ STRUCTURE INFORMATION ************************
+LAYER    MATERIAL THICKNESS REGION DIFTYP THICKNESS       TOP    BOTTOM
+
+    2       oxide    1.1540                  1.1540   -0.8671    0.2869
+    1     silicon  199.7131      1      p  199.7131    0.2869  200.0000
+
+***********************************************************************
+
+
+ Bias step   1:    0.00 (Volts)
+
+     ********************************************************************
+       Material    Thickness   Type   Junction Depth   Sheet Resistance  
+     --------------------------------------------------------------------
+
+          oxide      1.15 um 
+        silicon       200 um     P            200 um       637   ohm/sq
+
+     ********************************************************************
 
  Exiting source file main.inp.
 
