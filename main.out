@@ -18,7 +18,7 @@
          ***       TSUPREM-4 is a trademark of Synopsys, Inc.       ***
          **************************************************************
 
-                              16-Feb-2023 13:43:24
+                              16-Feb-2023 14:49:15
 
 
 
@@ -34,9 +34,16 @@ Comments from mask data file "mask.tl1":
 The following masks are currently defined (locations in microns):
     Name:  Field        min X:    0.0000   max X:   24.0000
         opaque between    0.0000  and   3.9000
-    Name:  MOSGATE      min X:    0.0000   max X:   24.0000
+    Name:  MOS          min X:    0.0000   max X:   24.0000
         opaque between    0.0000  and   1.0000
         opaque between    3.0000  and   5.0000
+        opaque between    7.0000  and   9.0000
+        opaque between   11.0000  and  24.0000
+    Name:  MOSGATE      min X:    0.0000   max X:   24.0000
+        opaque between    0.0000  and   1.0000
+        opaque between    1.5000  and   2.5000
+        opaque between    3.0000  and   5.0000
+        opaque between    5.5000  and   6.5000
         opaque between    7.0000  and   9.0000
         opaque between   11.0000  and  24.0000
     Name:  Oxide        min X:    0.0000   max X:   24.0000
@@ -65,11 +72,13 @@ The following masks are currently defined (locations in microns):
         opaque between   22.2500  and  22.5000
         opaque between   22.7500  and  24.0000
     Name:  Metal        min X:    0.0000   max X:   24.0000
-        opaque between    0.0000  and   1.5000
+        opaque between    0.0000  and   1.2500
         opaque between    1.7500  and   2.2500
-        opaque between    2.5000  and   5.5000
+        opaque between    2.7500  and   5.2500
         opaque between    5.7500  and   6.2500
-        opaque between    6.5000  and  13.7500
+        opaque between    6.7500  and   9.0000
+        opaque between    9.5000  and  10.5000
+        opaque between   11.0000  and  13.7500
         opaque between   14.2500  and  17.7500
         opaque between   18.2500  and  21.5000
         opaque between   21.7500  and  22.2500
@@ -79,7 +88,7 @@ $ Background Doping
 INITIALIZE BORON=1E15
 ** Automatic X grid generation:  lines based on mask edges.
 ** Automatic Y grid generation.
-   100 lines in the x direction.
+   98 lines in the x direction.
    36 lines in the y direction.
 
 $ Grow buried layer masking oxide
@@ -91,6 +100,14 @@ EXPOSE MASK=Oxide
 DEVELOP
 $ ETCH POLYSILICON TRAP THICK=0.7 ANGLE=79
 ETCH OXIDE THICK=1
+ETCH PHOTORESIST ALL
+
+$ DEPOSIT POLYSILICON THICK=0.4 SPACES=2
+DEPOSIT PHOTORESIST THICK=1.0
+EXPOSE MASK=MOS
+DEVELOP
+$ ETCH POLYSILICON TRAP THICK=0.7 ANGLE=79
+ETCH OXIDE THICK=0.6
 ETCH PHOTORESIST ALL
 
 $ DEPOSIT POLYSILICON THICK=0.4 SPACES=2
@@ -113,7 +130,6 @@ $ETCH OXIDE THICK=0.1
 ETCH PHOTORESIST ALL
 
 $ Define polysilicon gate
-MATERIAL MAT=POLY ^POLYCRYS
 DEPOSIT POLYSILICON THICK=0.1
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=Poly
@@ -121,27 +137,17 @@ DEVELOP
 ETCH POLYSILICON TRAP THICK=1
 ETCH PHOTORESIST ALL
 
-
-
 $ Oxidize the polysilicon gate
 DIFFUSION TIME=30 TEMP=1000 INERT
 
-$DEPOSIT OXIDE THICKNES=0.50
-
-DEPOSIT PHOTORESIST THICK=1.0
-EXPOSE MASK=Contact
-DEVELOP
-$ETCH OXIDE THICK=1.5
-ETCH PHOTORESIST ALL
-
-
-DEPOSIT ALUMINUM THICK=1
-ETCH ALUMINUM THICK=1
+DEPOSIT ALUMINUM THICK=2
+ETCH ALUMINUM THICK=2
 
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=Metal
 DEVELOP
-ETCH ALUMINUM THICK=1
+
+ETCH ALUMINUM THICK=2
 ETCH PHOTORESIST ALL
 
 ELECTRICAL
@@ -176,6 +182,17 @@ COLOR SILICON COLOR=7
 COLOR POLY COLOR=6
 COLOR OXIDE COLOR=5
 COLOR ALUM COLOR=2
+
+SAVEFILE OUT.FILE-wafer.tif tif
+
+*** Error:  No character string given for out.file-wafer.tif.
+
+*** The remainder of the file will not be executed, ***
+***    but it will be checked for correct syntax.   ***
+
+
+*** Error:  Errors detected on command input.
+
 
  Exiting source file main.inp.
 
