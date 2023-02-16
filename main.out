@@ -18,7 +18,7 @@
          ***       TSUPREM-4 is a trademark of Synopsys, Inc.       ***
          **************************************************************
 
-                              16-Feb-2023 14:49:15
+                              16-Feb-2023 15:20:10
 
 
 
@@ -83,6 +83,17 @@ The following masks are currently defined (locations in microns):
         opaque between   18.2500  and  21.5000
         opaque between   21.7500  and  22.2500
         opaque between   22.5000  and  24.0000
+    Name:  FillOxide    min X:    0.0000   max X:   24.0000
+        opaque between    1.2500  and   1.7500
+        opaque between    2.2500  and   2.7500
+        opaque between    5.2500  and   5.7500
+        opaque between    6.2500  and   6.7500
+        opaque between    9.0000  and   9.5000
+        opaque between   10.5000  and  11.0000
+        opaque between   13.7500  and  14.2500
+        opaque between   17.7500  and  18.2500
+        opaque between   21.5000  and  21.7500
+        opaque between   22.2500  and  22.5000
 
 $ Background Doping
 INITIALIZE BORON=1E15
@@ -140,14 +151,14 @@ ETCH PHOTORESIST ALL
 $ Oxidize the polysilicon gate
 DIFFUSION TIME=30 TEMP=1000 INERT
 
-DEPOSIT ALUMINUM THICK=2
-ETCH ALUMINUM THICK=2
+DEPOSIT ALUMINUM THICK=10
+ETCH ALUMINUM THICK=10
 
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=Metal
 DEVELOP
 
-ETCH ALUMINUM THICK=2
+ETCH ALUMINUM THICK=1.0
 ETCH PHOTORESIST ALL
 
 ELECTRICAL
@@ -173,6 +184,13 @@ LAYER    MATERIAL THICKNESS REGION DIFTYP THICKNESS       TOP    BOTTOM
 
      ********************************************************************
 
+DEPOSIT PHOTORESIST THICK=0.5
+EXPOSE MASK=Metal
+DEVELOP
+DEPOSIT OXIDE THICK=2
+ETCH OXIDE THICK = 2.5
+ETCH PHOTORESIST ALL
+
 $ Plot structure
 SELECT Z=LOG10(BORON) TITLE="Etching"
 PLOT.2D SCALE Y.MAX=1 Y.MIN=-3
@@ -183,15 +201,26 @@ COLOR POLY COLOR=6
 COLOR OXIDE COLOR=5
 COLOR ALUM COLOR=2
 
-SAVEFILE OUT.FILE-wafer.tif tif
 
-*** Error:  No character string given for out.file-wafer.tif.
+SAVEFILE OUT.FILE=wafer.tif tif
 
-*** The remainder of the file will not be executed, ***
-***    but it will be checked for correct syntax.   ***
-
-
-*** Error:  Errors detected on command input.
+Electrode    Material     X-min        X-max        Y-min        Y-max
+   Name        Name     (microns)    (microns)    (microns)    (microns)
+----------  ----------  ---------    ---------    ---------    ---------
+4           aluminum      22.5000      23.0000      -0.3651       0.2853
+5           aluminum      21.7500      22.2500      -0.3651       0.2853
+6           aluminum      20.9999      21.5000      -0.3651       0.2853
+7           aluminum      18.2500      19.0000      -0.3651       0.2853
+8           aluminum      16.9999      17.7500      -0.3651       0.2853
+9           aluminum      14.2500      15.0000      -0.3651       0.2853
+10          aluminum      13.0000      13.7500      -0.3651       0.2853
+11          aluminum       9.4999      10.5000      -0.3651       0.1853
+12          aluminum       6.7500       7.0000      -0.3651       0.2853
+13          aluminum       5.7500       6.2500      -0.3651       0.1349
+14          aluminum       4.9999       5.2500      -0.3651       0.2853
+15          aluminum       2.7500       3.0000      -0.3651       0.2853
+16          aluminum       1.7500       2.2500      -0.3651       0.1349
+17          aluminum       0.9999       1.2500      -0.3651       0.2853
 
 
  Exiting source file main.inp.
