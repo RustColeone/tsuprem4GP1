@@ -18,7 +18,7 @@
          ***       TSUPREM-4 is a trademark of Synopsys, Inc.       ***
          **************************************************************
 
-                              21-Feb-2023 22:01:10
+                              21-Feb-2023 22:31:28
 
 
 
@@ -114,26 +114,23 @@ The following masks are currently defined (locations in microns):
         opaque between   19.0000  and  20.7500
         opaque between   22.2500  and  24.0000
     Name:  NNMASK       min X:    0.0000   max X:   24.0000
-        opaque between    0.0000  and   5.0000
-        opaque between    5.2500  and   6.7500
+        opaque between    0.0000  and   4.9500
+        opaque between    5.3000  and   6.7500
         opaque between    7.0000  and  13.0000
         opaque between   13.7500  and  21.0000
         opaque between   21.5000  and  24.0000
     Name:  PPMASK       min X:    0.0000   max X:   24.0000
-        opaque between    0.0000  and   1.0000
-        opaque between    1.2500  and   2.7500
-        opaque between    3.0000  and  14.2500
-        opaque between   15.0000  and  24.0000
+        opaque between    0.0000  and   0.9500
+        opaque between    1.3000  and   2.7000
+        opaque between    3.0500  and  14.5000
+        opaque between   15.2500  and  24.0000
 
 $ Background Doping
 INITIALIZE BORON=1E15
 ** Automatic X grid generation:  lines based on mask edges.
 ** Automatic Y grid generation.
-   104 lines in the x direction.
+   124 lines in the x direction.
    36 lines in the y direction.
-
-$ Grow buried layer masking oxide
-DIFFUSION TEMP=1000 TIME=120 STEAM
 
 
 DEPOSIT PHOTORESIST THICKNESS = 4
@@ -159,7 +156,7 @@ ETCH PHOTORESIST ALL
 DEPOSIT PHOTORESIST THICKNESS = 4
 EXPOSE MASK=PPMASK
 DEVELOP
-IMPLANT BORON DOSE=5E18 ENERGY=220 TILT=10 ROTATION=20
+IMPLANT BORON DOSE=1E17 ENERGY=100 TILT=10 ROTATION=20
 
 *** Warning:  Because the PD.FERMI model is selected, the effect of the damage
               caused by this implant on subsequent diffusions will be ignored.
@@ -176,7 +173,9 @@ IMPLANT ARSENIC DOSE=1E16 ENERGY=220 TILT=10 ROTATION=20
 
 ETCH PHOTORESIST ALL
 
-
+$ Grow buried layer masking oxide
+DIFFUSION TEMP=1000 TIME=120 STEAM
+SAVEFILE OUT.FILE=wafer.tif tif
 
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=Oxide
@@ -236,8 +235,8 @@ ELECTRICAL
 ************************ STRUCTURE INFORMATION ************************
 LAYER    MATERIAL THICKNESS REGION DIFTYP THICKNESS       TOP    BOTTOM
 
-    2       oxide    0.6504                  0.6504   -0.3651    0.2853
-    1     silicon  199.7147      1      p  199.7147    0.2853  200.0000
+    2       oxide    0.6464                  0.6464   -0.3628    0.2835
+    1     silicon  199.7165      1      p  199.7165    0.2835  200.0000
 
 ***********************************************************************
 
@@ -248,7 +247,7 @@ LAYER    MATERIAL THICKNESS REGION DIFTYP THICKNESS       TOP    BOTTOM
        Material    Thickness   Type   Junction Depth   Sheet Resistance  
      --------------------------------------------------------------------
 
-          oxide      6500 A  
+          oxide      6460 A  
         silicon       200 um     P            200 um       637   ohm/sq
 
      ********************************************************************
@@ -260,6 +259,7 @@ DEPOSIT OXIDE THICK=2
 ETCH OXIDE THICK = 2.5
 ETCH PHOTORESIST ALL
 
+$Not NECESSARY
 $DEPOSIT PHOTORESIST NEGATIVE THICK=1.0
 $EXPOSE MASK=ALLDEVICE
 $DEVELOP
@@ -284,22 +284,13 @@ ELECTRICAL X=1 THRESHOLD NMOS V="0 2 0.1"
 ************************ STRUCTURE INFORMATION ************************
 LAYER    MATERIAL THICKNESS REGION DIFTYP THICKNESS       TOP    BOTTOM
 
-    3    aluminum    0.2000                  0.2000   -0.3651   -0.1651
-    2       oxide    0.4504                  0.4504   -0.1651    0.2853
-    1     silicon  199.7147      1      p  199.7147    0.2853  200.0000
+    2       oxide    0.6462                  0.6462   -0.3627    0.2835
+    1     silicon  199.7165      1      p  199.7165    0.2835  200.0000
 
 ***********************************************************************
-*** The bulk region will be set to #1
-*** This is an enhancement NMOSFET.
 
-*** Warning: Threshold calculated at end of bias region.
-
-
-Threshold (volts) :   1.164
-
-Extrapolated from :
- bias=1.900   conductance=6.1464e-06  
- bias=2.000   conductance=6.9818e-06  
+*** Warning: The MOS structure must have at least 3 layers. This structure
+             has 2 layers.
 
 ELECTRICAL X=2 THRESHOLD NMOS V="0 2 0.1"
 
@@ -307,20 +298,24 @@ ELECTRICAL X=2 THRESHOLD NMOS V="0 2 0.1"
 ************************ STRUCTURE INFORMATION ************************
 LAYER    MATERIAL THICKNESS REGION DIFTYP THICKNESS       TOP    BOTTOM
 
-    4    aluminum    0.5000                  0.5000   -0.3651    0.1349
-    3 polysilicon    0.1000      1      p    0.1000    0.1349    0.2349
-    2       oxide    0.0504                  0.0504    0.2349    0.2853
-    1     silicon  199.7147      1      p  199.7147    0.2853  200.0000
+    4    aluminum    0.4997                  0.4997   -0.3630    0.1368
+    3 polysilicon    0.1000      1      n    0.1000    0.1368    0.2368
+    2       oxide    0.0470                  0.0470    0.2368    0.2838
+    1     silicon  199.7162      2      n    0.3225    0.2838    0.6063
+                                 1      p  199.3366    0.6634  200.0000
 
 ***********************************************************************
 *** The bulk region will be set to #1
-*** This is an enhancement NMOSFET.
+*** This is a depletion N-MOSFET.
 
-Threshold (volts) :   0.907
+*** Warning: Threshold calculated at end of bias region.
+
+
+Threshold (volts) : -20.482
 
 Extrapolated from :
- bias=1.300   conductance=2.4270e-05  
- bias=1.400   conductance=3.0450e-05  
+ bias=-0.000  conductance=2.2361e-04  
+ bias=0.100   conductance=2.2471e-04  
 
 ELECTRICAL X=6 THRESHOLD NMOS V="0 2 0.1"
 
@@ -328,42 +323,23 @@ ELECTRICAL X=6 THRESHOLD NMOS V="0 2 0.1"
 ************************ STRUCTURE INFORMATION ************************
 LAYER    MATERIAL THICKNESS REGION DIFTYP THICKNESS       TOP    BOTTOM
 
-    4    aluminum    0.5000                  0.5000   -0.3651    0.1349
-    3 polysilicon    0.1000      1      p    0.1000    0.1349    0.2349
-    2       oxide    0.0504                  0.0504    0.2349    0.2853
-    1     silicon  199.7147      1      p  199.7147    0.2853  200.0000
+    4    aluminum    0.4999                  0.4999   -0.3628    0.1372
+    3 polysilicon    0.1000      1      p    0.1000    0.1372    0.2372
+    2       oxide    0.0464                  0.0464    0.2372    0.2835
+    1     silicon  199.7165      1      p  199.7165    0.2835  200.0000
 
 ***********************************************************************
 *** The bulk region will be set to #1
 *** This is an enhancement NMOSFET.
 
-Threshold (volts) :   0.907
+Threshold (volts) :   0.895
 
 Extrapolated from :
- bias=1.300   conductance=2.4266e-05  
- bias=1.400   conductance=3.0446e-05  
+ bias=1.300   conductance=2.6852e-05  
+ bias=1.400   conductance=3.3478e-05  
 
 
-SAVEFILE OUT.FILE=wafer.tif tif
-
-Electrode    Material     X-min        X-max        Y-min        Y-max
-   Name        Name     (microns)    (microns)    (microns)    (microns)
-----------  ----------  ---------    ---------    ---------    ---------
-4           aluminum       2.7500       3.0000      -0.3650       0.2853
-5           aluminum       1.7500       2.2500      -0.3651       0.1349
-6           aluminum       1.0000       1.2500      -0.3651       0.2853
-7           aluminum       9.4999      10.5000      -0.3651       0.1349
-8           aluminum       6.7500       7.0000      -0.3651       0.2853
-9           aluminum       5.7500       6.2500      -0.3651       0.1349
-10          aluminum       5.0000       5.2500      -0.3650       0.2853
-11          aluminum      14.2500      15.0000      -0.3651       0.2853
-12          aluminum      13.0000      13.7500      -0.3651       0.2853
-13          aluminum      18.2500      19.0000      -0.3651       0.2853
-14          aluminum      16.9999      17.7500      -0.3651       0.2853
-15          aluminum      22.5000      23.0000      -0.3651       0.2853
-16          aluminum      21.7500      22.2500      -0.3651       0.2853
-17          aluminum      20.9999      21.5000      -0.3651       0.2853
-
+$SAVEFILE OUT.FILE=wafer.tif tif
 
  Exiting source file main.inp.
 
