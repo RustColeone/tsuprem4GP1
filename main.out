@@ -18,7 +18,7 @@
          ***       TSUPREM-4 is a trademark of Synopsys, Inc.       ***
          **************************************************************
 
-                              21-Feb-2023 21:18:16
+                              21-Feb-2023 22:01:10
 
 
 
@@ -34,6 +34,14 @@ Comments from mask data file "mask.tl1":
 The following masks are currently defined (locations in microns):
     Name:  Field        min X:    0.0000   max X:   24.0000
         opaque between    0.0000  and   3.9000
+    Name:  ALLDEVICE    min X:    0.0000   max X:   24.0000
+        opaque between    0.0000  and   1.0000
+        opaque between    3.0000  and   5.0000
+        opaque between    7.0000  and   9.0000
+        opaque between   11.0000  and  13.0000
+        opaque between   15.0000  and  17.0000
+        opaque between   19.0000  and  21.0000
+        opaque between   23.0000  and  24.0000
     Name:  MOS          min X:    0.0000   max X:   24.0000
         opaque between    0.0000  and   1.0000
         opaque between    3.0000  and   5.0000
@@ -161,7 +169,7 @@ ETCH PHOTORESIST ALL
 DEPOSIT PHOTORESIST THICKNESS = 4
 EXPOSE MASK=NNMASK
 DEVELOP
-IMPLANT BORON DOSE=1E16 ENERGY=220 TILT=10 ROTATION=20
+IMPLANT ARSENIC DOSE=1E16 ENERGY=220 TILT=10 ROTATION=20
 
 *** Warning:  Because the PD.FERMI model is selected, the effect of the damage
               caused by this implant on subsequent diffusions will be ignored.
@@ -169,27 +177,22 @@ IMPLANT BORON DOSE=1E16 ENERGY=220 TILT=10 ROTATION=20
 ETCH PHOTORESIST ALL
 
 
-$ DEPOSIT POLYSILICON THICK=0.4 SPACES=2
+
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=Oxide
 DEVELOP
-$ ETCH POLYSILICON TRAP THICK=0.7 ANGLE=79
 ETCH OXIDE THICK=1
 ETCH PHOTORESIST ALL
 
-$ DEPOSIT POLYSILICON THICK=0.4 SPACES=2
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=MOS
 DEVELOP
-$ ETCH POLYSILICON TRAP THICK=0.7 ANGLE=79
 ETCH OXIDE THICK=0.6
 ETCH PHOTORESIST ALL
 
-$ DEPOSIT POLYSILICON THICK=0.4 SPACES=2
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=MOSGATE
 DEVELOP
-$ ETCH POLYSILICON TRAP THICK=0.7 ANGLE=79
 ETCH OXIDE THICK=0.6
 ETCH PHOTORESIST ALL
 
@@ -257,6 +260,13 @@ DEPOSIT OXIDE THICK=2
 ETCH OXIDE THICK = 2.5
 ETCH PHOTORESIST ALL
 
+$DEPOSIT PHOTORESIST NEGATIVE THICK=1.0
+$EXPOSE MASK=ALLDEVICE
+$DEVELOP
+$ETCH POLYSILICON TRAP THICK=0.7 ANGLE=79
+$ETCH OXIDE THICK=1
+$ETCH PHOTORESIST ALL
+$DEPOSIT OXIDE THICK=0.6504
 
 $ Plot structure
 SELECT Z=LOG10(BORON) TITLE="Etching"
@@ -267,6 +277,29 @@ COLOR SILICON COLOR=7
 COLOR POLY COLOR=6
 COLOR OXIDE COLOR=5
 COLOR ALUM COLOR=2
+
+ELECTRICAL X=1 THRESHOLD NMOS V="0 2 0.1"
+
+
+************************ STRUCTURE INFORMATION ************************
+LAYER    MATERIAL THICKNESS REGION DIFTYP THICKNESS       TOP    BOTTOM
+
+    3    aluminum    0.2000                  0.2000   -0.3651   -0.1651
+    2       oxide    0.4504                  0.4504   -0.1651    0.2853
+    1     silicon  199.7147      1      p  199.7147    0.2853  200.0000
+
+***********************************************************************
+*** The bulk region will be set to #1
+*** This is an enhancement NMOSFET.
+
+*** Warning: Threshold calculated at end of bias region.
+
+
+Threshold (volts) :   1.164
+
+Extrapolated from :
+ bias=1.900   conductance=6.1464e-06  
+ bias=2.000   conductance=6.9818e-06  
 
 ELECTRICAL X=2 THRESHOLD NMOS V="0 2 0.1"
 
