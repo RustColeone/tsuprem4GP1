@@ -18,7 +18,7 @@
          ***       TSUPREM-4 is a trademark of Synopsys, Inc.       ***
          **************************************************************
 
-                              17-Feb-2023 18:53:36
+                              21-Feb-2023 21:18:16
 
 
 
@@ -127,6 +127,48 @@ INITIALIZE BORON=1E15
 $ Grow buried layer masking oxide
 DIFFUSION TEMP=1000 TIME=120 STEAM
 
+
+DEPOSIT PHOTORESIST THICKNESS = 4
+EXPOSE MASK=NMASK
+DEVELOP
+IMPLANT ARSENIC DOSE=7E12 ENERGY=220 TILT=10 ROTATION=20
+
+*** Warning:  Because the PD.FERMI model is selected, the effect of the damage
+              caused by this implant on subsequent diffusions will be ignored.
+
+ETCH PHOTORESIST ALL
+
+DEPOSIT PHOTORESIST THICKNESS = 4
+EXPOSE MASK=PMASK
+DEVELOP
+IMPLANT BORON DOSE=1.2E13 ENERGY=220 TILT=10 ROTATION=20
+
+*** Warning:  Because the PD.FERMI model is selected, the effect of the damage
+              caused by this implant on subsequent diffusions will be ignored.
+
+ETCH PHOTORESIST ALL
+
+DEPOSIT PHOTORESIST THICKNESS = 4
+EXPOSE MASK=PPMASK
+DEVELOP
+IMPLANT BORON DOSE=5E18 ENERGY=220 TILT=10 ROTATION=20
+
+*** Warning:  Because the PD.FERMI model is selected, the effect of the damage
+              caused by this implant on subsequent diffusions will be ignored.
+
+ETCH PHOTORESIST ALL
+
+DEPOSIT PHOTORESIST THICKNESS = 4
+EXPOSE MASK=NNMASK
+DEVELOP
+IMPLANT BORON DOSE=1E16 ENERGY=220 TILT=10 ROTATION=20
+
+*** Warning:  Because the PD.FERMI model is selected, the effect of the damage
+              caused by this implant on subsequent diffusions will be ignored.
+
+ETCH PHOTORESIST ALL
+
+
 $ DEPOSIT POLYSILICON THICK=0.4 SPACES=2
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=Oxide
@@ -225,6 +267,49 @@ COLOR SILICON COLOR=7
 COLOR POLY COLOR=6
 COLOR OXIDE COLOR=5
 COLOR ALUM COLOR=2
+
+ELECTRICAL X=2 THRESHOLD NMOS V="0 2 0.1"
+
+
+************************ STRUCTURE INFORMATION ************************
+LAYER    MATERIAL THICKNESS REGION DIFTYP THICKNESS       TOP    BOTTOM
+
+    4    aluminum    0.5000                  0.5000   -0.3651    0.1349
+    3 polysilicon    0.1000      1      p    0.1000    0.1349    0.2349
+    2       oxide    0.0504                  0.0504    0.2349    0.2853
+    1     silicon  199.7147      1      p  199.7147    0.2853  200.0000
+
+***********************************************************************
+*** The bulk region will be set to #1
+*** This is an enhancement NMOSFET.
+
+Threshold (volts) :   0.907
+
+Extrapolated from :
+ bias=1.300   conductance=2.4270e-05  
+ bias=1.400   conductance=3.0450e-05  
+
+ELECTRICAL X=6 THRESHOLD NMOS V="0 2 0.1"
+
+
+************************ STRUCTURE INFORMATION ************************
+LAYER    MATERIAL THICKNESS REGION DIFTYP THICKNESS       TOP    BOTTOM
+
+    4    aluminum    0.5000                  0.5000   -0.3651    0.1349
+    3 polysilicon    0.1000      1      p    0.1000    0.1349    0.2349
+    2       oxide    0.0504                  0.0504    0.2349    0.2853
+    1     silicon  199.7147      1      p  199.7147    0.2853  200.0000
+
+***********************************************************************
+*** The bulk region will be set to #1
+*** This is an enhancement NMOSFET.
+
+Threshold (volts) :   0.907
+
+Extrapolated from :
+ bias=1.300   conductance=2.4266e-05  
+ bias=1.400   conductance=3.0446e-05  
+
 
 SAVEFILE OUT.FILE=wafer.tif tif
 
