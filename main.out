@@ -18,12 +18,13 @@
          ***       TSUPREM-4 is a trademark of Synopsys, Inc.       ***
          **************************************************************
 
-                              22-Feb-2023 02:43:46
+                              22-Feb-2023 03:12:15
 
 
 
  Entering source file main.inp.
 
+$================================== INITIALIZATION ==================================
 $ Include Mask
 MASK IN.FILE =mask.tl1 PRINT
 
@@ -165,8 +166,9 @@ LAYER    MATERIAL THICKNESS REGION DIFTYP THICKNESS       TOP    BOTTOM
         silicon       200 um     P            200 um       636   ohm/sq
 
      ********************************************************************
+$================================== INITIALIZED ==================================
 
-$================================== DOPING ==================================
+$================================== START of DOPING ==================================
 DEPOSIT PHOTORESIST THICKNESS = 4
 EXPOSE MASK=NMASKPMOS
 DEVELOP
@@ -183,6 +185,7 @@ IMPLANT ARSENIC DOSE=1.766E12 ENERGY=300 TILT=0 ROTATION=20
 
 ETCH PHOTORESIST ALL
 
+$Additional doping made to the NMOS to achieve the threshold voltage
 DEPOSIT PHOTORESIST THICKNESS = 4
 EXPOSE MASK=PMASKNMOS
 DEVELOP
@@ -199,6 +202,7 @@ IMPLANT BORON DOSE=9E12 ENERGY=200 TILT=0 ROTATION=20
 ETCH PHOTORESIST ALL
 
 $no threshold voltage required, well can be deeper
+$deeper well also means easier PN junction
 DEPOSIT PHOTORESIST THICKNESS = 4
 EXPOSE MASK=NMASK
 DEVELOP
@@ -230,7 +234,7 @@ IMPLANT BORON DOSE=2E15 ENERGY=35 TILT=0 ROTATION=20
 
 ETCH PHOTORESIST ALL
 
-$no threshold voltage required, well can be deeper
+$well inside well for n+ contact points
 DEPOSIT PHOTORESIST THICKNESS = 4
 EXPOSE MASK=NNMASK
 DEVELOP
@@ -246,7 +250,7 @@ IMPLANT ARSENIC DOSE=1E16 ENERGY=20 TILT=0 ROTATION=20
 
 ETCH PHOTORESIST ALL
 
-$no threshold voltage required, well can be deeper
+$well inside well for p+ contact points, the contact for diode is done seperately
 DEPOSIT PHOTORESIST THICKNESS = 4
 EXPOSE MASK=PPMASK
 DEVELOP
@@ -262,7 +266,7 @@ IMPLANT BORON DOSE=3E12 ENERGY=20 TILT=0 ROTATION=20
 
 ETCH PHOTORESIST ALL
 
-$no threshold voltage required, well can be deeper
+$This can be deeper, hence we dope this seperately from PPMASK
 DEPOSIT PHOTORESIST THICKNESS = 4
 EXPOSE MASK=PPMASKDIODE
 DEVELOP
@@ -279,20 +283,28 @@ IMPLANT BORON DOSE=0.8E15 ENERGY=20 TILT=0 ROTATION=20
 ETCH PHOTORESIST ALL
 
 $================================== END OF DOPING ==================================
+
+$================================== START of STRUCTURE ==================================
+
+$Only 0.05 micrometer exisiting, adding some layers to work with
+$Deposite does not affect our doping
 DEPOSIT OXIDE THICKNESS = 0.6
 
+$Etch position to place device
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=Oxide
 DEVELOP
 ETCH OXIDE THICK=1
 ETCH PHOTORESIST ALL
 
+$Etch position for MOS is done seperately because an layer of gate oxide is required
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=MOS
 DEVELOP
 ETCH OXIDE THICK=0.6
 ETCH PHOTORESIST ALL
 
+$Etching everything apart from the gate oxide for the MOS
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=MOSGATE
 DEVELOP
@@ -301,16 +313,8 @@ ETCH PHOTORESIST ALL
 
 $Removing enough oxide for gate
 
-$ Define gate oxide
+$ Putting down polysilicon
 MATERIAL MAT=POLY ^POLYCRYS
-$DEPOSIT OXIDE THICK=0.1
-DEPOSIT PHOTORESIST THICK=1.0
-EXPOSE MASK=Poly
-DEVELOP
-$ETCH OXIDE THICK=0.1
-ETCH PHOTORESIST ALL
-
-$ Define polysilicon gate
 DEPOSIT POLYSILICON THICK=0.1
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=Poly
@@ -318,18 +322,19 @@ DEVELOP
 ETCH POLYSILICON TRAP THICK=1
 ETCH PHOTORESIST ALL
 
-$ Oxidize the polysilicon gate
+$ Oxidize the polysilicon gate, INERT gas doesn't seems to affect doping too much
 DIFFUSION TIME=30 TEMP=1000 INERT
 
+$This is not necessary, but can make the aluminum appears flat
 DEPOSIT ALUMINUM THICK=5
 ETCH ALUMINUM THICK=5
 DEPOSIT ALUMINUM THICK=5
 ETCH ALUMINUM THICK=5
 
+$Removing the excess aluminum for the metal contact
 DEPOSIT PHOTORESIST THICK=1.0
 EXPOSE MASK=Metal
 DEVELOP
-
 ETCH ALUMINUM THICK=1.0
 ETCH PHOTORESIST ALL
 
@@ -356,6 +361,7 @@ LAYER    MATERIAL THICKNESS REGION DIFTYP THICKNESS       TOP    BOTTOM
 
      ********************************************************************
 
+$Fill the gap between the contacts and smoothen them out with oxide
 DEPOSIT PHOTORESIST THICK=0.5
 EXPOSE MASK=Metal
 DEVELOP
@@ -372,14 +378,21 @@ $ETCH OXIDE THICK=1
 $ETCH PHOTORESIST ALL
 $DEPOSIT OXIDE THICK=0.6504
 
-$ Plot structure
-$SELECT Z=LOG10(BORON) TITLE="Etching"
-$PLOT.2D SCALE Y.MAX=1 Y.MIN=-3
+$================================== END of STRUCTURE ==================================
+
+$================================== START of DATA EXPORTING ==================================
+
+SELECT Z=LOG10(BORON) TITLE="Etching"
+PLOT.2D SCALE Y.MAX=1 Y.MIN=-3
+** Plotting to device: "x" (specified by DEFPDEV environment variable)
 $ Color fill the regions
-$COLOR SILICON COLOR=7
-$COLOR POLY COLOR=6
-$COLOR OXIDE COLOR=5
-$COLOR ALUM COLOR=2
+COLOR SILICON COLOR=7
+COLOR POLY COLOR=6
+COLOR OXIDE COLOR=5
+COLOR ALUM COLOR=2
+ETCH PHOTORESIST ALL
+
+*** Warning: Specified material not present in structure.  Etch ignored.
 
 ELECTRICAL X=2 THRESHOLD NMOS V="0 2 0.1"
 
@@ -425,6 +438,7 @@ Extrapolated from :
  bias=1.400   conductance=7.4951e-05  
 
 
+$================================== END of DATA EXPORTING ==================================
 
 SAVEFILE OUT.FILE=wafer.tif tif
 
